@@ -4,22 +4,22 @@ import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
+import {dynamoDbRegion, TABLES} from "@libs/constants";
 
-const awsRegion = 'eu-west-1';
 
 const dynamoDbClient = new DynamoDBClient({
-  region: awsRegion
+  region: dynamoDbRegion
 });
 
 const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<{}> = async () => {
   const productData = await dynamoDbDocumentClient.send(
-      new ScanCommand({ TableName: 'Products' })
+      new ScanCommand({ TableName: TABLES.PRODUCTS })
   );
 
   const stockData = await dynamoDbDocumentClient.send(
-      new ScanCommand({ TableName: 'Stocks' })
+      new ScanCommand({ TableName: TABLES.STOCKS })
   );
 
   const combinedData = productData.Items?.map((product) => {

@@ -2,11 +2,11 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {DynamoDBDocumentClient, GetCommand} from "@aws-sdk/lib-dynamodb";
+import {dynamoDbRegion, TABLES} from "@libs/constants";
 
-const awsRegion = 'eu-west-1';
 
 const dynamoDbClient = new DynamoDBClient({
-  region: awsRegion
+  region: dynamoDbRegion
 });
 
 const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient);
@@ -15,7 +15,7 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<{}> = async (event) =>
   const {productId} = event.pathParameters
 
   const params = {
-    TableName: 'Products',
+    TableName: TABLES.PRODUCTS,
     Key: {
       id: productId,
     },
