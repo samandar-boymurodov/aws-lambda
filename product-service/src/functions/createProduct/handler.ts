@@ -1,5 +1,4 @@
 import { DynamoDBClient} from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import {DynamoDBDocumentClient, PutCommand, PutCommandInput} from '@aws-sdk/lib-dynamodb'
 import { v4 as uuidv4 } from 'uuid';
 import schema from "./schema";
@@ -27,7 +26,7 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
   const params: PutCommandInput = {
     TableName: TABLES.PRODUCTS,
-    Item: marshall(item),
+    Item: item,
   };
 
   try {
